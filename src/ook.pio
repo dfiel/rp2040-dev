@@ -1,0 +1,30 @@
+;
+; Copyright (c) 2020 Raspberry Pi (Trading) Ltd.
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+
+.program ook
+.wrap_target
+	set pins, 1  ; Drive pin high and then delay for one cycle
+	set pins, 0  ; Drive pin low and then delay for one cycle
+.wrap
+
+% c-sdk {
+static inline void ook_program_init(PIO pio, uint sm, uint offset, uint pin, float div) {
+    pio_sm_config c = ook_program_get_default_config(offset);
+    // Map the state machine's SET pin group to one pin, namely the `pin`
+    // parameter to this function.
+    sm_config_set_set_pins(&c, pin, 1);
+    // Set this pin's GPIO function (connect PIO to the pad)
+    pio_gpio_init(pio, pin);
+    // Set the pin direction to output at the PIO
+    pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, true);
+    // Set the clock divider for the state machine
+    sm_config_set_clkdiv(&c, div);
+    // Load our configuration, and jump to the start of the program
+    pio_sm_init(pio, sm, offset, &c);
+    // Set the state machine running
+    pio_sm_set_enabled(pio, sm, true);
+}
+%}

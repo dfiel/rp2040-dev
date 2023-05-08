@@ -6,8 +6,8 @@
 
 .program ook
 .wrap_target
-	set pins, 1  ; Drive pin high and then delay for one cycle
-	set pins, 0  ; Drive pin low and then delay for one cycle
+	set pins, 1 [1]  ; Drive pin high and then delay for one cycle
+	set pins, 0 [1]  ; Drive pin low and then delay for one cycle
 .wrap
 
 % c-sdk {

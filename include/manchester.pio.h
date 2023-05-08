@@ -13,25 +13,30 @@
 // ---------- //
 
 #define manchester_wrap_target 0
-#define manchester_wrap 5
+#define manchester_wrap 10
 
-#define manchester_offset_start 4u
+#define manchester_offset_start 9u
 
 static const uint16_t manchester_program_instructions[] = {
             //     .wrap_target
-    0xb542, //  0: nop                    side 0 [5] 
-    0x1b04, //  1: jmp    4               side 1 [3] 
-    0xbd42, //  2: nop                    side 1 [5] 
-    0xb342, //  3: nop                    side 0 [3] 
-    0x6021, //  4: out    x, 1                       
-    0x0022, //  5: jmp    !x, 2                      
+    0xe04f, //  0: set    y, 15                      
+    0xb842, //  1: nop                    side 1     
+    0x1081, //  2: jmp    y--, 1          side 0     
+    0xe058, //  3: set    y, 24                      
+    0x0084, //  4: jmp    y--, 4                     
+    0x0049, //  5: jmp    x--, 9                     
+    0xe04f, //  6: set    y, 15                      
+    0xb842, //  7: nop                    side 1     
+    0x1087, //  8: jmp    y--, 7          side 0     
+    0x6021, //  9: out    x, 1                       
+    0x0023, // 10: jmp    !x, 3                      
             //     .wrap
 };
 
 #if !PICO_NO_HARDWARE
 static const struct pio_program manchester_program = {
     .instructions = manchester_program_instructions,
-    .length = 6,
+    .length = 11,
     .origin = -1,
 };
 
@@ -48,7 +53,7 @@ static inline void manchester_program_init(PIO pio, uint sm, uint offset, uint p
     pio_gpio_init(pio, pin);
     pio_sm_config c = manchester_program_get_default_config(offset);
     sm_config_set_sideset_pins(&c, pin);
-    sm_config_set_out_shift(&c, true, true, 32);
+    sm_config_set_out_shift(&c, true, true, 8);
     sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
     sm_config_set_clkdiv(&c, div);
     pio_sm_init(pio, sm, offset + manchester_offset_start, &c);

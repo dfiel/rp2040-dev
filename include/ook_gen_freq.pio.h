@@ -23,7 +23,7 @@ static const uint16_t ook_gen_freq_program_instructions[] = {
     0xe052, //  1: set    y, 18                      
     0xb842, //  2: nop                    side 1     
     0x1082, //  3: jmp    y--, 2          side 0     
-    0xc005, //  4: irq    nowait 5                   
+    0xc045, //  4: irq    clear 5                    
             //     .wrap
 };
 

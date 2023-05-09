@@ -7,14 +7,14 @@
 
 .wrap_target
 do_1:
-    irq set START_TX_IRQ    ; Start bit transmission
+    irq clear START_TX_IRQ    ; Start bit transmission
     irq wait END_TX_IRQ     ; Wait for bit to finish
     nop [31]                ; Delay for 32+6=38 cycles
     jmp get_bit [5]         ; then continue to next bit
 do_0:
     nop [31]                ; Delay for 32+6=38 cycles
     nop [5]                 ; then continue to next bit
-    irq set START_TX_IRQ    ; Start bit transmission
+    irq clear START_TX_IRQ    ; Start bit transmission
     irq wait END_TX_IRQ     ; Wait for bit to finish
 public start:
 get_bit:

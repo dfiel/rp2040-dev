@@ -1,0 +1,36 @@
+.program ook_shift
+.define START_TX_IRQ 4
+.define END_TX_IRQ 5
+
+; Autopull must be enabled -- this program does not care about the threshold.
+; The program starts at the public label 'start'.
+
+.wrap_target
+do_1:
+    irq set START_TX_IRQ    ; Start bit transmission
+    irq wait END_TX_IRQ     ; Wait for bit to finish
+    nop [31]                ; Delay for 32+6=38 cycles
+    jmp get_bit [5]         ; then continue to next bit
+do_0:
+    nop [31]                ; Delay for 32+6=38 cycles
+    nop [5]                 ; then continue to next bit
+    irq set START_TX_IRQ    ; Start bit transmission
+    irq wait END_TX_IRQ     ; Wait for bit to finish
+public start:
+get_bit:
+    out x, 1               ; Always shift out one bit from OSR to X, so we can
+    jmp !x do_0            ; branch on it. Autopull refills the OSR when empty.
+.wrap
+
+% c-sdk {
+static inline void ook_shift_program_init(PIO pio, uint sm, uint offset, float div) {
+
+    pio_sm_config c = ook_shift_program_get_default_config(offset);
+    sm_config_set_out_shift(&c, true, true, 8);
+    sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
+    sm_config_set_clkdiv(&c, div);
+    pio_sm_init(pio, sm, offset + ook_shift_offset_start, &c);
+
+    pio_sm_set_enabled(pio, sm, true);
+}
+%}

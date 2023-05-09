@@ -1,0 +1,30 @@
+.program ook_gen_freq
+.side_set 1 opt
+
+.define START_TX_IRQ 4
+.define END_TX_IRQ 5
+
+.wrap_target
+public start:
+    irq wait START_TX_IRQ
+    set y, 18
+gen_wave:
+    nop         side 1  
+    jmp y-- gen_wave side 0     ; Loop (y + 1) times, y is a 32 bit number
+    irq set END_TX_IRQ
+.wrap
+
+% c-sdk {
+static inline void ook_gen_freq_program_init(PIO pio, uint sm, uint offset, uint pin, float div) {
+    pio_sm_set_pins_with_mask(pio, sm, 0, 1u << pin);
+    pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, true);
+    pio_gpio_init(pio, pin);
+
+    pio_sm_config c = ook_gen_freq_program_get_default_config(offset);
+    sm_config_set_sideset_pins(&c, pin);
+    sm_config_set_clkdiv(&c, div);
+    pio_sm_init(pio, sm, offset + ook_gen_freq_offset_start, &c);
+
+    pio_sm_set_enabled(pio, sm, true);
+}
+%}

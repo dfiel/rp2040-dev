@@ -21,8 +21,8 @@ static const uint16_t ook_shift_program_instructions[] = {
             //     .wrap_target
     0xc004, //  0: irq    nowait 4                   
     0x20c5, //  1: wait   1 irq, 5                   
-    0xbf42, //  2: nop                           [31]
-    0x0508, //  3: jmp    8                      [5] 
+    0xbe42, //  2: nop                           [30]
+    0x0008, //  3: jmp    8                          
     0xbf42, //  4: nop                           [31]
     0xa542, //  5: nop                           [5] 
     0xc004, //  6: irq    nowait 4                   

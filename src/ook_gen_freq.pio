@@ -7,7 +7,7 @@
 .wrap_target
 public start:
     wait 1 irq START_TX_IRQ
-    set y, 18
+    set y, 19
 gen_wave:
     nop         side 1  
     jmp y-- gen_wave side 0     ; Loop (y + 1) times, y is a 32 bit number

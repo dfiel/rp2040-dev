@@ -13,24 +13,28 @@
 // ------------ //
 
 #define ook_gen_freq_wrap_target 0
-#define ook_gen_freq_wrap 4
+#define ook_gen_freq_wrap 8
 
 #define ook_gen_freq_offset_start 0u
 
 static const uint16_t ook_gen_freq_program_instructions[] = {
             //     .wrap_target
     0x20c4, //  0: wait   1 irq, 4                   
-    0xe053, //  1: set    y, 19                      
-    0xb842, //  2: nop                    side 1     
-    0x1082, //  3: jmp    y--, 2          side 0     
-    0xc005, //  4: irq    nowait 5                   
+    0xf850, //  1: set    y, 16           side 1     
+    0xb042, //  2: nop                    side 0     
+    0x1882, //  3: jmp    y--, 2          side 1     
+    0xd005, //  4: irq    nowait 5        side 0     
+    0xb842, //  5: nop                    side 1     
+    0xb042, //  6: nop                    side 0     
+    0xb842, //  7: nop                    side 1     
+    0xb042, //  8: nop                    side 0     
             //     .wrap
 };
 
 #if !PICO_NO_HARDWARE
 static const struct pio_program ook_gen_freq_program = {
     .instructions = ook_gen_freq_program_instructions,
-    .length = 5,
+    .length = 9,
     .origin = -1,
 };
 

@@ -13,29 +13,30 @@
 // --------- //
 
 #define ook_shift_wrap_target 0
-#define ook_shift_wrap 9
+#define ook_shift_wrap 10
 
-#define ook_shift_offset_start 8u
+#define ook_shift_offset_start 9u
 
 static const uint16_t ook_shift_program_instructions[] = {
             //     .wrap_target
     0xc004, //  0: irq    nowait 4                   
     0x20c5, //  1: wait   1 irq, 5                   
-    0xbe42, //  2: nop                           [30]
-    0x0008, //  3: jmp    8                          
-    0xbf42, //  4: nop                           [31]
-    0xa542, //  5: nop                           [5] 
-    0xc004, //  6: irq    nowait 4                   
-    0x20c5, //  7: wait   1 irq, 5                   
-    0x6021, //  8: out    x, 1                       
-    0x0024, //  9: jmp    !x, 4                      
+    0xbf42, //  2: nop                           [31]
+    0xa542, //  3: nop                           [5] 
+    0x0009, //  4: jmp    9                          
+    0xbf42, //  5: nop                           [31]
+    0xa542, //  6: nop                           [5] 
+    0xc004, //  7: irq    nowait 4                   
+    0x20c5, //  8: wait   1 irq, 5                   
+    0x6021, //  9: out    x, 1                       
+    0x0025, // 10: jmp    !x, 5                      
             //     .wrap
 };
 
 #if !PICO_NO_HARDWARE
 static const struct pio_program ook_shift_program = {
     .instructions = ook_shift_program_instructions,
-    .length = 10,
+    .length = 11,
     .origin = -1,
 };
 

@@ -9,7 +9,8 @@
 do_1:
     irq set START_TX_IRQ    ; Start bit transmission
     wait 1 irq END_TX_IRQ     ; Wait for bit to finish
-    nop [30]                ; Delay for 31 cycles
+    nop [31]                ; Delay for 32+6=38 cycles
+    nop [5]
     jmp get_bit             ; then continue to next bit
 do_0:
     nop [31]                ; Delay for 32+6=38 cycles

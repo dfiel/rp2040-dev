@@ -7,15 +7,15 @@
 
 .wrap_target
 do_1:
-    irq clear START_TX_IRQ    ; Start bit transmission
-    irq wait END_TX_IRQ     ; Wait for bit to finish
+    irq set START_TX_IRQ    ; Start bit transmission
+    wait 1 irq END_TX_IRQ     ; Wait for bit to finish
     nop [31]                ; Delay for 32+6=38 cycles
     jmp get_bit [5]         ; then continue to next bit
 do_0:
     nop [31]                ; Delay for 32+6=38 cycles
     nop [5]                 ; then continue to next bit
-    irq clear START_TX_IRQ    ; Start bit transmission
-    irq wait END_TX_IRQ     ; Wait for bit to finish
+    irq set START_TX_IRQ    ; Start bit transmission
+    wait 1 irq END_TX_IRQ     ; Wait for bit to finish
 public start:
 get_bit:
     out x, 1               ; Always shift out one bit from OSR to X, so we can

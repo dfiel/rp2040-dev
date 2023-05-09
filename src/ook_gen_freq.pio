@@ -6,12 +6,12 @@
 
 .wrap_target
 public start:
-    irq wait START_TX_IRQ
+    wait 1 irq START_TX_IRQ
     set y, 18
 gen_wave:
     nop         side 1  
     jmp y-- gen_wave side 0     ; Loop (y + 1) times, y is a 32 bit number
-    irq clear END_TX_IRQ
+    irq set END_TX_IRQ
 .wrap
 
 % c-sdk {
